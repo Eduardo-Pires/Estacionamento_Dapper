@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\estacionamento\estacionamento_dapper.csproj" />
+    <ProjectReference Include="..\estacionamento\estacionamento.csproj" />
   </ItemGroup>
 
 </Project>

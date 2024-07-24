@@ -1,4 +1,4 @@
-namespace Estacionamento_dapper.Models;
+namespace estacionamento.Models;
 
 public class ErrorViewModel
 {

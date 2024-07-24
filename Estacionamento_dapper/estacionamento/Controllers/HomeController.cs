@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Estacionamento_dapper.Models;
+using estacionamento.Models;
 
-namespace Estacionamento_dapper.Controllers;
+namespace estacionamento.Controllers;
 
 public class HomeController : Controller
 {
