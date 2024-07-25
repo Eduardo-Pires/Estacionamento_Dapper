@@ -1,10 +1,11 @@
 using System.Data;
-using Microsoft.Data.SqlClient;
-
+using MySql.Data.MySqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddTransient(x => new SqlConnection(builder.Configuration.GetConnectionString("Default")));
+// Registrar IDbConnection com a string de conexão
+builder.Services.AddTransient<IDbConnection>(sp => 
+    new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
