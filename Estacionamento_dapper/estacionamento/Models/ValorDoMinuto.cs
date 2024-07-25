@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace estacionamento.Models;
 
-public class ValoresHora
+public class ValorDoMinuto
 {
     [Key]
     public int Id { get; set; }
