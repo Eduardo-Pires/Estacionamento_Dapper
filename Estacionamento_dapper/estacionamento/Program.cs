@@ -1,11 +1,14 @@
 using System.Data;
 using MySql.Data.MySqlClient;
+using estacionamento.Repositorios;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Registrar IDbConnection com a string de conexão
-builder.Services.AddTransient<IDbConnection>(sp => 
+builder.Services.AddTransient<IDbConnection>((sp) => 
     new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddScoped(typeof(IRepositorio<>), typeof(RepositorioDapper<>));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
