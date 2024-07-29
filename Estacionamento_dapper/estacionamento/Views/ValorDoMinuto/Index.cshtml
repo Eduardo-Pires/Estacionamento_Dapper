@@ -14,6 +14,8 @@
                 <th>Id</th>
                 <th>Minutos</th>
                 <th>Valor</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +25,15 @@
                     <td>@item.Id</td>
                     <td>@item.Minutos</td>
                     <td>R$ @item.Valor</td>
+                    <td>
+                            <a asp-action="Editar" asp-route-id="@item.Id" asp-controller="ValorDoMinuto" class="btn btn-warning">Editar</a>
+                    </td>
+                    <td>
+                        <form onsubmit="return confirm('confirma a exclusão?')" asp-action="Apagar" asp-controller="ValorDoMinuto" method="post">
+                            <input type="hidden" name="id" value="@item.Id">
+                            <button type="submit" class="btn btn-danger">excluir</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
