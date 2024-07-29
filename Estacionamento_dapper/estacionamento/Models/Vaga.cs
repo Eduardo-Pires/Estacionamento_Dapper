@@ -1,23 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using estacionamento.Repositorios;
 
 namespace estacionamento.Models;
-
+[Table("vagas")]
 public class Vaga
 {
-    [Key]
+    [IgnoreDapper]
     public int Id { get; set; }
-
-    [Required]
-    [MaxLength(50)]
     public string CodigoLocalizacao { get; set; } = default!;
-
-    [Required]
     public bool Ocupada { get; set; }
-
-    // Navigation property
-    public ICollection<Ticket> Tickets { get; set; } = default!;
 }
 
