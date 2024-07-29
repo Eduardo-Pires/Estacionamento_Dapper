@@ -3,36 +3,65 @@ using Microsoft.AspNetCore.Mvc;
 using estacionamento.Models;
 using System.Data;
 using Dapper;
+using estacionamento.Repositorios;
 
 namespace estacionamento.Controllers;
 
 [Route("/valores")]
 public class ValorDoMinutoController : Controller
 {
-    private readonly IDbConnection _connection;
+    private readonly IRepositorio<ValorDoMinuto> _repo;
 
-    public ValorDoMinutoController(IDbConnection connection)
+    public ValorDoMinutoController(IRepositorio<ValorDoMinuto> repositorio)
     {
-        _connection = connection;
+        _repo = repositorio;
     }
 
     public IActionResult Index()
     {
-        var valores = _connection.Query<ValorDoMinuto>("SELECT * FROM valores");
+        var valores = _repo.ObterTodos();
         return View(valores);
     }
 
-    [HttpGet("/novo")]
+    [HttpGet("Novo")]
     public IActionResult Novo()
     {
         return View();
     }
 
-    [HttpPost("/Criar")]
+    [HttpPost("Criar")]
     public IActionResult Criar([FromForm] ValorDoMinuto valorDoMinuto)
     {
-        var sql = "INSERT INTO valores (Minutos, Valor) VALUES (@Minutos, @Valor)";
-        _connection.Execute(sql, valorDoMinuto);
+        _repo.Inserir(valorDoMinuto);
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet("{id}/Editar")]
+    public IActionResult Editar([FromRoute] int id)
+    {
+        ValorDoMinuto? valor = _repo.ObterPorId(id);
+
+        if (valor == null)
+        {
+            return NotFound();
+        }
+
+        return View(valor);
+    }
+
+    [HttpPost("{id}/Alterar")]
+    public IActionResult Alterar([FromRoute] int id, [FromForm] ValorDoMinuto valorDoMinuto)
+    {
+        _repo.Atualizar(valorDoMinuto);
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost("apagar")]
+    public IActionResult Apagar([FromForm] int id)
+    {
+        _repo.Excluir(id);
 
         return RedirectToAction(nameof(Index));
     }
