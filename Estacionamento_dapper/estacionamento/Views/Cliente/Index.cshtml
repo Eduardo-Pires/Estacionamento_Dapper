@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Clientes";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Clientes</h1>
+    <a class="btn btn-primary" asp-area="" asp-controller="Cliente" asp-action="Novo">Novo Cliente</a>
+</div>
+
+<div class="text-center">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nome</td>
+                    <td>@item.CPF</td>
+                    <td>@item.Telefone</td>
+                    <td>
+                            <a asp-action="Editar" asp-route-id="@item.Id" asp-controller="Clientes
+                    " class="btn btn-warning">Editar</a>
+                    </td>
+                    <td>
+                        <form onsubmit="return confirm('confirma a exclusão?')" asp-action="Apagar" asp-controller="Cliente" method="post">
+                            <input type="hidden" name="id" value="@item.Id">
+                            <button type="submit" class="btn btn-danger">excluir</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
