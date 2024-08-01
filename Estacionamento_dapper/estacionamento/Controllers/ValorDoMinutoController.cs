@@ -53,8 +53,8 @@ public class ValorDoMinutoController : Controller
     [HttpPost("{id}/Alterar")]
     public IActionResult Alterar([FromRoute] int id, [FromForm] ValorDoMinuto valorDoMinuto)
     {
+        valorDoMinuto.Id = id;
         _repo.Atualizar(valorDoMinuto);
-
         return RedirectToAction(nameof(Index));
     }
 
