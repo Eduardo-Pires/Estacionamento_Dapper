@@ -28,8 +28,7 @@
                     <td>@item.CPF</td>
                     <td>@item.Telefone</td>
                     <td>
-                            <a asp-action="Editar" asp-route-id="@item.Id" asp-controller="Clientes
-                    " class="btn btn-warning">Editar</a>
+                            <a asp-action="Editar" asp-route-id="@item.Id" asp-controller="Cliente" class="btn btn-warning">Editar</a>
                     </td>
                     <td>
                         <form onsubmit="return confirm('confirma a exclusão?')" asp-action="Apagar" asp-controller="Cliente" method="post">
