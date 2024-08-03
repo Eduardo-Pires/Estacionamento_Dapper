@@ -1,0 +1,43 @@
+@model estacionamento.Models.Veiculo
+
+@{
+    ViewData["Title"] = "Editar Veículo";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Editar Veículo</h1>
+</div>
+
+<div class="container mt-4">
+    <form asp-action="Alterar" method="post" asp-route-id="@Model.Id" class="needs-validation">
+        <div class="row justify-content-center">
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.Placa" class="control-label"></label>
+                <input asp-for="@Model.Placa" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.Modelo" class="control-label"></label>
+                <input asp-for="@Model.Modelo" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.Marca" class="control-label"></label>
+                <input asp-for="@Model.Marca" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="form-group col-md-6">
+                <label asp-for="@Model.ClienteId" class="control-label"></label>
+                <input asp-for="@Model.ClienteId" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="form-group col-md-6 text-center">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </form>
+</div>

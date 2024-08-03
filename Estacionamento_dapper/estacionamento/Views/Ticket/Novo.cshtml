@@ -1,0 +1,45 @@
+@model estacionamento.Models.Ticket
+
+@{
+    ViewData["Title"] = "Novo Ticket";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+</div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Criar" method="post" class="needs-validation" novalidate>
+                <div class="form-group mt-1">
+                    <label asp-for="DataEntrada" class="control-label"></label>
+                    <input asp-for="DataEntrada" class="form-control" required/>
+                    <span asp-validation-for="DataEntrada" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-1">
+                    <label asp-for="DataSaida" class="control-label"></label>
+                    <input asp-for="DataSaida" class="form-control"/>
+                    <span asp-validation-for="DataSaida" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-1">
+                    <label asp-for="Valor" class="control-label"></label>
+                    <input asp-for="Valor" class="form-control" required/>
+                    <span asp-validation-for="Valor" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-1">
+                    <label asp-for="VeiculoId" class="control-label"></label>
+                    <input asp-for="VeiculoId" class="form-control" required/>
+                    <span asp-validation-for="VeiculoId" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-1">
+                    <label asp-for="VagaId" class="control-label"></label>
+                    <input asp-for="VagaId" class="form-control" required/>
+                    <span asp-validation-for="VagaId" class="text-danger"></span>
+                </div>
+                <div class="text-center mt-2">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

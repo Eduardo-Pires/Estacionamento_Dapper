@@ -1,0 +1,30 @@
+@model estacionamento.Models.Vaga
+
+@{
+    ViewData["Title"] = "Editar Vaga";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Editar vaga</h1>
+</div>
+<div class="container mt-4">
+    <form asp-action="Alterar" method="post" asp-route-id="@Model.Id" class="needs-validation">
+        <div class="row justify-content-center">
+            <div class="form-group col-md-6">
+                <label asp-for="CodigoLocalizacao" class="control-label"></label>
+                <input asp-for="CodigoLocalizacao" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="form-group col-md-6">
+                <label asp-for="Ocupada" class="control-label"></label>
+                <input asp-for="Ocupada" class="form-check"/>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="form-group col-md-6 text-center">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </form>
+</div>
