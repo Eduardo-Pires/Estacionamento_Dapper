@@ -12,29 +12,30 @@
         <div class="col-md-6">
             <form asp-action="Criar" method="post" class="needs-validation" novalidate>
                 <div class="form-group mt-1">
-                    <label asp-for="DataEntrada" class="control-label"></label>
-                    <input asp-for="DataEntrada" class="form-control" required/>
-                    <span asp-validation-for="DataEntrada" class="text-danger"></span>
+                    <label for="Nome" class="control-label">Nome Do Cliente</label>
+                    <input type="text" id="Nome" name="Nome" class="form-control"/>
                 </div>
                 <div class="form-group mt-1">
-                    <label asp-for="DataSaida" class="control-label"></label>
-                    <input asp-for="DataSaida" class="form-control"/>
-                    <span asp-validation-for="DataSaida" class="text-danger"></span>
+                    <label for="CPF" class="control-label"></label>
+                    <input type="text" id="CPF" name="CPF" class="form-control"/>
                 </div>
                 <div class="form-group mt-1">
-                    <label asp-for="Valor" class="control-label"></label>
-                    <input asp-for="Valor" class="form-control" required/>
-                    <span asp-validation-for="Valor" class="text-danger"></span>
+                    <label for="Placa" class="control-label"></label>
+                    <input type="text" id="Placa" name="Placa" class="form-control" required/>
                 </div>
                 <div class="form-group mt-1">
-                    <label asp-for="VeiculoId" class="control-label"></label>
-                    <input asp-for="VeiculoId" class="form-control" required/>
-                    <span asp-validation-for="VeiculoId" class="text-danger"></span>
+                    <label for="Modelo" class="control-label"></label>
+                    <input type="text" id="Modelo" name="Modelo" class="form-control" required/>
                 </div>
                 <div class="form-group mt-1">
-                    <label asp-for="VagaId" class="control-label"></label>
-                    <input asp-for="VagaId" class="form-control" required/>
-                    <span asp-validation-for="VagaId" class="text-danger"></span>
+                    <label for="Marca" class="control-label"></label>
+                    <input type="text" id="Marca" name="Marca" class="form-control" required/>
+                </div>
+                <div class="form-group mt-1">
+                    <label for="VagaId" class="control-label"></label>
+                    <select name="VagaId" id="VagaId" asp-items="@ViewBag.Vagas">
+                        <option value="">[Selecione uma vaga]</option>
+                    </select>
                 </div>
                 <div class="text-center mt-2">
                     <button type="submit" class="btn btn-primary">Salvar</button>

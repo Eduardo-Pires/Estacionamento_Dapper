@@ -12,11 +12,11 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Data Entrada</th>
-                <th>Data Saída</th>
-                <th>Valor</th>
-                <th>Veículo Id</th>
-                <th>Vaga Id</th>
+                <th>Nome do Cliente</th>
+                <th>Placa do Veículo</th>
+                <th>Marca do carro</th>
+                <th>Modelo do Carro</th>
+                <th>Horário de Entrada</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -26,11 +26,11 @@
             {
                 <tr>
                     <td>@item.Id</td>
+                    <td>@item.Veiculo.Cliente.Nome</td>
+                    <td>@item.Veiculo.Placa</td>
+                    <td>@item.Veiculo.Marca</td>
+                    <td>@item.Veiculo.Modelo</td>
                     <td>@item.DataEntrada</td>
-                    <td>@item.DataSaida</td>
-                    <td>@item.Valor</td>
-                    <td>@item.VeiculoId</td>
-                    <td>@item.VagaId</td>
                     <td>
                         <a asp-action="Editar" asp-route-id="@item.Id" asp-controller="Ticket" class="btn btn-warning">Editar</a>
                     </td>
