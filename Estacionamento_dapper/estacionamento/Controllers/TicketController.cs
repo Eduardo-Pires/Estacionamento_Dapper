@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using estacionamento.Models;
 using estacionamento.Repositorios;
+using System.Data;
+using Dapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace estacionamento.Controllers
 {
@@ -8,21 +11,35 @@ namespace estacionamento.Controllers
     public class TicketController : Controller
     {
         private readonly IRepositorio<Ticket> _repo;
+        private readonly IRepositorio<Vaga> _repoVaga;
+        private readonly IDbConnection _cnn;
 
-        public TicketController(IRepositorio<Ticket> repositorio)
+        public TicketController(IDbConnection conexao)
         {
-            _repo = repositorio;
+            _cnn = conexao;
+            _repo = new RepositorioDapper<Ticket>(_cnn);
         }
 
-            public IActionResult Index()
+        public IActionResult Index()
         {
-            var valores = _repo.ObterTodos();
-            return View(valores);
+            var sql = @"
+            SELECT t.*, v.*, c.*
+            FROM tickets t INNER JOIN veiculos v ON v.Id = t.VeiculoId
+                           INNER JOIN clientes c ON c.Id = v.ClienteId
+            ";
+        var valores = _cnn.Query<Ticket, Veiculo, Cliente, Ticket>(sql, (ticket,veiculo, cliente) => {
+            veiculo.Cliente = cliente;
+            ticket.Veiculo = veiculo;
+            return ticket;
+        }, splitOn: "Id");
+        return View(valores);
         }
 
         [HttpGet("Novo")]
         public IActionResult Novo()
         {
+            var Vagas = _repoVaga.ObterTodos();
+            ViewBag.Vagas = new SelectList(Vagas, "Id", "Nome");
             return View();
         }
 
