@@ -4,6 +4,8 @@ using estacionamento.Repositorios;
 using System.Data;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authentication;
+using estacionamento.DTO;
 
 namespace estacionamento.Controllers
 {
@@ -27,50 +29,39 @@ namespace estacionamento.Controllers
             FROM tickets t INNER JOIN veiculos v ON v.Id = t.VeiculoId
                            INNER JOIN clientes c ON c.Id = v.ClienteId
             ";
-        var valores = _cnn.Query<Ticket, Veiculo, Cliente, Ticket>(sql, (ticket,veiculo, cliente) => {
-            veiculo.Cliente = cliente;
-            ticket.Veiculo = veiculo;
-            return ticket;
-        }, splitOn: "Id");
-        return View(valores);
+            var valores = _cnn.Query<Ticket, Veiculo, Cliente, Ticket>(sql, (ticket,veiculo, cliente) => {
+                veiculo.Cliente = cliente;
+                ticket.Veiculo = veiculo;
+                return ticket;
+            }, splitOn: "Id");
+            return View(valores);
         }
 
         [HttpGet("Novo")]
         public IActionResult Novo()
         {
-            var Vagas = _repoVaga.ObterTodos();
-            ViewBag.Vagas = new SelectList(Vagas, "Id", "Nome");
+            PreencherVagas();
             return View();
         }
 
         [HttpPost("Criar")]
-        public IActionResult Criar([FromForm] Ticket ticket)
-        {   
+        public IActionResult Criar([FromForm] TicketDTO ticketDTO)
+        {  
+            Cliente cliente = BuscaOuCadastraClientePorDTO(ticketDTO);
+            Veiculo veiculo = BuscaOuCadastraVeiculoPorDTO(ticketDTO, cliente);
+             
+            Ticket ticket = new Ticket{
+                VeiculoId = veiculo.Id,
+                VagaId = ticketDTO.VagaId,
+                DataEntrada = DateTime.Now
+            };
             _repo.Inserir(ticket);
 
+            DeixaVagaOcupada(ticketDTO.VagaId);
+
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/Editar")]
-        public IActionResult Editar([FromRoute] int id)
-        {
-            Ticket? valor = _repo.ObterPorId(id);
-
-            if (valor == null)
-            {
-                return NotFound();
-            }
-
-            return View(valor);
-        }
-
-        [HttpPost("{id}/Alterar")]
-        public IActionResult Alterar([FromRoute] int id, [FromForm] Ticket ticket)
-        {
-            ticket.Id = id;
-            _repo.Atualizar(ticket);
-            return RedirectToAction(nameof(Index));
-        }
 
         [HttpPost("apagar")]
         public IActionResult Apagar([FromForm] int id)
@@ -78,5 +69,90 @@ namespace estacionamento.Controllers
             _repo.Excluir(id);
             return RedirectToAction(nameof(Index));
         }
+
+        private void PreencherVagas()
+        {
+            var sql = @"
+                SELECT * FROM vagas
+                WHERE Ocupada = false 
+            ";
+            var vagas = _cnn.Query<Vaga>(sql);
+            ViewBag.Vagas = new SelectList(vagas, "Id", "CodigoLocalizacao");
+        }
+
+        private Cliente BuscaOuCadastraClientePorDTO(TicketDTO ticketDTO)
+        {
+            Cliente? cliente = null;
+        
+            if(!string.IsNullOrEmpty(ticketDTO.CPF))
+            {
+                var query = @"
+                    SELECT * FROM Clientes
+                    WHERE CPF = @CPF
+                ";
+                
+                cliente = _cnn.QueryFirstOrDefault<Cliente>(query, new { CPF = ticketDTO.CPF });
+            }
+        
+            if (cliente != null)
+            {
+                return cliente;
+            }
+
+            cliente = new Cliente
+            {
+                Nome = ticketDTO.Nome,
+                CPF = ticketDTO.CPF
+            };
+            
+            var sqlInsert = "INSERT INTO Clientes (Nome, CPF) VALUES (@Nome, @CPF);";
+            _cnn.Execute(sqlInsert, cliente);
+            
+            var sqlLastInsertId = "SELECT LAST_INSERT_ID();";
+            cliente.Id = _cnn.ExecuteScalar<int>(sqlLastInsertId);
+            
+            return cliente;
+        }
+
+        private Veiculo BuscaOuCadastraVeiculoPorDTO(TicketDTO ticketDTO, Cliente cliente)
+        {
+            Veiculo? veiculo = null;
+        
+            if(!string.IsNullOrEmpty(ticketDTO.Placa))
+            {
+                var query = @"
+                    SELECT * FROM veiculos 
+                    WHERE Placa = @Placa and ClienteId = @ClienteId
+                ";
+                
+                veiculo = _cnn.QueryFirstOrDefault<Veiculo>(query, new { Placa = ticketDTO.Placa, ClienteId = cliente.Id });
+            }
+        
+            if (veiculo != null)
+            {
+                return veiculo;
+            }
+
+            veiculo = new Veiculo
+            {
+                Placa = ticketDTO.Placa,
+                Marca = ticketDTO.Marca,
+                Modelo = ticketDTO.Modelo,
+                ClienteId = cliente.Id
+            };
+
+            var sql = $"INSERT INTO Veiculos (Placa, Marca, Modelo, ClienteId) VALUES (@Placa, @Marca, @Modelo, @ClienteId); SELECT Last_Insert_Id();";
+            veiculo.Id = _cnn.ExecuteScalar<int>(sql, veiculo);
+
+            return veiculo;
+        }
+        private void DeixaVagaOcupada(int vagaId)
+        {
+            var sql = $"Update Vagas SET Ocupada = true WHERE Id = @Id";
+            
+            _cnn.Execute(sql, new { Id = vagaId });
+        }
     }
 }
+
+

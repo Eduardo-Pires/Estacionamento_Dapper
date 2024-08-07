@@ -18,7 +18,6 @@
                 <th>Modelo do Carro</th>
                 <th>Horário de Entrada</th>
                 <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -31,9 +30,6 @@
                     <td>@item.Veiculo.Marca</td>
                     <td>@item.Veiculo.Modelo</td>
                     <td>@item.DataEntrada</td>
-                    <td>
-                        <a asp-action="Editar" asp-route-id="@item.Id" asp-controller="Ticket" class="btn btn-warning">Editar</a>
-                    </td>
                     <td>
                         <form onsubmit="return confirm('Confirma a exclusão?')" asp-action="Apagar" asp-controller="Ticket" method="post">
                             <input type="hidden" name="id" value="@item.Id">

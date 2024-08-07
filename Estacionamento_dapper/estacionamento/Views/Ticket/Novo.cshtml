@@ -16,24 +16,24 @@
                     <input type="text" id="Nome" name="Nome" class="form-control"/>
                 </div>
                 <div class="form-group mt-1">
-                    <label for="CPF" class="control-label"></label>
+                    <label for="CPF" class="control-label">CPF</label>
                     <input type="text" id="CPF" name="CPF" class="form-control"/>
                 </div>
                 <div class="form-group mt-1">
-                    <label for="Placa" class="control-label"></label>
+                    <label for="Placa" class="control-label">Placa</label>
                     <input type="text" id="Placa" name="Placa" class="form-control" required/>
                 </div>
                 <div class="form-group mt-1">
-                    <label for="Modelo" class="control-label"></label>
+                    <label for="Modelo" class="control-label">Modelo</label>
                     <input type="text" id="Modelo" name="Modelo" class="form-control" required/>
                 </div>
                 <div class="form-group mt-1">
-                    <label for="Marca" class="control-label"></label>
+                    <label for="Marca" class="control-label">Marca</label>
                     <input type="text" id="Marca" name="Marca" class="form-control" required/>
                 </div>
                 <div class="form-group mt-1">
-                    <label for="VagaId" class="control-label"></label>
-                    <select name="VagaId" id="VagaId" asp-items="@ViewBag.Vagas">
+                    <label for="VagaId" class="control-label">Vagas</label>
+                    <select name="VagaId" id="VagaId" class="form-select text-center" asp-items="@ViewBag.Vagas">
                         <option value="">[Selecione uma vaga]</option>
                     </select>
                 </div>
