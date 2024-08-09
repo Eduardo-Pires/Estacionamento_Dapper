@@ -57,7 +57,7 @@ namespace estacionamento.Controllers
             };
             _repo.Inserir(ticket);
 
-            DeixaVagaOcupada(ticketDTO.VagaId);
+            AlteraStatusVaga(ticketDTO.VagaId, true);
 
             return RedirectToAction(nameof(Index));
         }
@@ -66,7 +66,9 @@ namespace estacionamento.Controllers
         [HttpPost("apagar")]
         public IActionResult Apagar([FromForm] int id)
         {
+            Ticket ticket = _repo.ObterPorId(id);
             _repo.Excluir(id);
+            AlteraStatusVaga(ticket.VagaId , false);
             return RedirectToAction(nameof(Index));
         }
 
@@ -146,11 +148,11 @@ namespace estacionamento.Controllers
 
             return veiculo;
         }
-        private void DeixaVagaOcupada(int vagaId)
+        private void AlteraStatusVaga(int vagaId, bool ocupada)
         {
-            var sql = $"Update Vagas SET Ocupada = true WHERE Id = @Id";
+            var sql = $"Update Vagas SET Ocupada = @Ocupada WHERE Id = @Id";
             
-            _cnn.Execute(sql, new { Id = vagaId });
+            _cnn.Execute(sql, new {Ocupada = ocupada, Id = vagaId });
         }
     }
 }
