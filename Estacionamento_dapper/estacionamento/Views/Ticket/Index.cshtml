@@ -2,6 +2,14 @@
     ViewData["Title"] = "Tickets";
 }
 
+@if(TempData["alerta"] != null && (bool)TempData["alerta"] == true)
+{
+    <script>
+        window.alert("A Saída desse Ticket já foi registrada e o pagamento foi encerrado.");
+    </script>
+}
+
+
 <div class="text-center">
     <h1 class="display-4">Tickets</h1>
     <a class="btn btn-primary" asp-area="" asp-controller="Ticket" asp-action="Novo">Novo Ticket</a>
@@ -17,6 +25,9 @@
                 <th>Marca do carro</th>
                 <th>Modelo do Carro</th>
                 <th>Horário de Entrada</th>
+                <th>Data Saida</th>
+                <th>Valor Total</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -30,6 +41,15 @@
                     <td>@item.Veiculo.Marca</td>
                     <td>@item.Veiculo.Modelo</td>
                     <td>@item.DataEntrada</td>
+                    <td>@item?.DataSaida</td>
+                    <td>R$ @item.ValorTotal((ValorDoMinuto) ViewBag.valorDoMinuto)</td>
+                    <td>
+                        <form onsubmit="return confirm('Confirma a saída?')" asp-action="Saida" asp-controller="Ticket" method="post">
+                            <input type="hidden" name="id" value="@item.Id">
+                            <button type="submit" class="btn btn-dark">Registrar Saída</button>
+                        </form>
+
+                    </td>
                     <td>
                         <form onsubmit="return confirm('Confirma a exclusão?')" asp-action="Apagar" asp-controller="Ticket" method="post">
                             <input type="hidden" name="id" value="@item.Id">

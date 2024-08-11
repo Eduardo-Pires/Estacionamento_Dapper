@@ -34,6 +34,7 @@ namespace estacionamento.Controllers
                 ticket.Veiculo = veiculo;
                 return ticket;
             }, splitOn: "Id");
+            ViewBag.valorDoMinuto =  _cnn.QueryFirstOrDefault<ValorDoMinuto>("SELECT * FROM Valores ORDER BY Id DESC LIMIT 1");
             return View(valores);
         }
 
@@ -61,6 +62,26 @@ namespace estacionamento.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost("Saida")]
+        public IActionResult Saida(int id)
+        {
+            Ticket ticket = _repo.ObterPorId(id);
+            
+            if (ticket.DataSaida == null)
+            {
+                ticket.DataSaida = DateTime.Now;
+                _repo.Atualizar(ticket);    
+                AlteraStatusVaga(ticket.VagaId, false);
+            }
+            else
+            {
+                TempData["alerta"] = true;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
 
         [HttpPost("apagar")]
