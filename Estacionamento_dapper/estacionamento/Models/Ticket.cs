@@ -23,5 +23,24 @@ public class Ticket
     public Veiculo Veiculo { get; set; } = default!;
     [IgnoreDapper]
     public Vaga Vaga { get; set; } = default!;
+
+    public decimal ValorTotal(ValorDoMinuto valorDoMinuto)
+    {
+        if (DataSaida == null)
+        {
+            var valor = valorDoMinuto.Valor / valorDoMinuto.Minutos;
+            TimeSpan diferenca = DateTime.Now - DataEntrada;
+            int minutos = (int)diferenca.TotalMinutes;
+            return minutos * valor;
+        }
+        else
+        {
+            var valor = valorDoMinuto.Valor / valorDoMinuto.Minutos;
+            TimeSpan diferenca = DataSaida.Value - DataEntrada;
+            int minutos = (int)diferenca.TotalMinutes;
+            return minutos * valor;
+        }
+        
+    }
 }
 
