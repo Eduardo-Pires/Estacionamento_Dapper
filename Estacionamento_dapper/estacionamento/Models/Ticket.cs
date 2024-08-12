@@ -26,21 +26,42 @@ public class Ticket
 
     public decimal ValorTotal(ValorDoMinuto valorDoMinuto)
     {
+        TimeSpan diferenca;
+        int minutos;
+        var valorPorMinuto = valorDoMinuto.Valor / valorDoMinuto.Minutos;
+
         if (DataSaida == null)
         {
-            var valor = valorDoMinuto.Valor / valorDoMinuto.Minutos;
-            TimeSpan diferenca = DateTime.Now - DataEntrada;
-            int minutos = (int)diferenca.TotalMinutes;
-            return minutos * valor;
+            diferenca = DateTime.Now - DataEntrada;
         }
         else
         {
-            var valor = valorDoMinuto.Valor / valorDoMinuto.Minutos;
-            TimeSpan diferenca = DataSaida.Value - DataEntrada;
-            int minutos = (int)diferenca.TotalMinutes;
-            return minutos * valor;
+            diferenca = DataSaida.Value - DataEntrada;
         }
         
+        minutos = (int)diferenca.TotalMinutes;
+        return valorPorMinuto * minutos;
+    }
+
+    public void FecharTicket(ValorDoMinuto valorDoMinuto)
+    {
+        if (DataSaida != null)
+        {
+            throw new Exception("Ticket já fechado");
+        }
+
+        if (DataEntrada > DateTime.Now)
+        {
+            throw new Exception("Data de entrada maior que a data atual");
+        }
+
+        if (valorDoMinuto == null)
+        {
+            throw new Exception("Valor do minuto não encontrado");
+        }
+
+        DataSaida = DateTime.Now;
+        Valor = ValorTotal(valorDoMinuto);
     }
 }
 

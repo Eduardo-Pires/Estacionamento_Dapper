@@ -70,7 +70,8 @@ namespace estacionamento.Controllers
             
             if (ticket.DataSaida == null)
             {
-                ticket.DataSaida = DateTime.Now;
+                ValorDoMinuto? valorDoMinutoFinal = _cnn.QueryFirstOrDefault<ValorDoMinuto>("SELECT * FROM Valores ORDER BY Id DESC LIMIT 1");
+                ticket.FecharTicket(valorDoMinutoFinal);
                 _repo.Atualizar(ticket);    
                 AlteraStatusVaga(ticket.VagaId, false);
             }
